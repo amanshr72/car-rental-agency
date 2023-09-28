@@ -29,32 +29,34 @@ class CarController extends Controller
 
     public function store(Request $request)
     {   
-        if ($request->hasFile('image_path')) {
-            File::isDirectory($this->path) ?: File::makeDirectory($this->path, 0777, true, true);
-            $request->validate(['image' => 'required|image|mimes:jpeg,png,jpg,gif|max:5048']);
-            $image_path = $request->file('image_path');
-            $imageName = time() . '.' . $image_path->getClientOriginalExtension();
-            $image_path->move($this->path, $imageName);
-        } else {
-            $imageName = '';
-        }
-
         $request->validate([
             'vehicle_model' => 'required|string|max:255',
             'vehicle_number' => 'required|string|max:20',
+            'description' => 'required|string|max:255',
             'seating_capacity' => 'required|integer|min:2',
             'rent_per_day' => 'required|numeric|min:0',
         ]);
+        
+        if ($request->hasFile('vehicle_image')) {
+            File::isDirectory($this->path) ?: File::makeDirectory($this->path, 0777, true, true);
+            $request->validate(['image' => 'required|image|mimes:jpeg,png,jpg,gif|max:5048']);
+            $vehicle_image = $request->file('vehicle_image');
+            $imageName = time() . '.' . $vehicle_image->getClientOriginalExtension();
+            $vehicle_image->move($this->path, $imageName);
+        } else {
+            $imageName = '';
+        }
 
         Car::create([
             'vehicle_model' =>  $request->vehicle_model,
             'vehicle_number' => $request->vehicle_number,
             'seating_capacity' => $request->seating_capacity,
+            'description' => $request->description,
             'rent_per_day' => $request->rent_per_day,
-            'image_path' => $imageName
+            'vehicle_image' => $imageName
         ]);
 
-        return redirect()->back();
+        return redirect()->route('car.index')->with('success', 'Car Added Successfully');
     }
 
     public function show(Car $car)
@@ -70,36 +72,41 @@ class CarController extends Controller
 
     public function update(Request $request, string $id)
     {   
-        if ($request->hasFile('image_path')) {
-            File::isDirectory($this->path) ?: File::makeDirectory($this->path, 0777, true, true);
-            $request->validate(['image' => 'required|image|mimes:jpeg,png,jpg,gif|max:5048']);
-            $image_path = $request->file('image_path');
-            $imageName = time() . '.' . $image_path->getClientOriginalExtension();
-            $image_path->move($this->path, $imageName);
-        } else {
-            $imageName = '';
-        }
-
         $request->validate([
             'vehicle_model' => 'required|string|max:255',
             'vehicle_number' => 'required|string|max:20',
+            'description' => 'required|string|max:255',
             'seating_capacity' => 'required|integer|min:1',
             'rent_per_day' => 'required|numeric|min:0',
         ]);
+       
+        if ($request->hasFile('vehicle_image')) {
+            File::isDirectory($this->path) ?: File::makeDirectory($this->path, 0777, true, true);
+            $this->validate($request, ['vehicle_image' => 'image|mimes:jpeg,png,jpg,gif|max:5048',]);
+            $vehicle_image = $request->file('vehicle_image');
+            $imageName = $request->vehicle_model . '_' . time() . '.' . $vehicle_image->getClientOriginalExtension();
+            $vehicle_image->move($this->path, $imageName);
+
+        } else {
+            $imageName = '';
+        }
 
         Car::where('id', $id)->update([
             'vehicle_model' =>  $request->vehicle_model,
             'vehicle_number' => $request->vehicle_number,
             'seating_capacity' => $request->seating_capacity,
+            'description' => $request->description,
             'rent_per_day' => $request->rent_per_day,
-            'image_path' => $imageName,
+            'vehicle_image' => $imageName,
         ]);
+
+        return redirect()->route('car.index')->with('success', 'Car Updated Successfully');
     }
 
     public function destroy(string $id)
     {
         Car::find($id)->delete();
-        return redirect()->back()->with('danger', 'Car Detail has been delated successfully');
+        return redirect()->route('car.index')->with('danger', 'Car Detail has been delated successfully');
     }
 
     public function availableCars(){

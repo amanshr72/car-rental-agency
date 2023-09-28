@@ -12,7 +12,9 @@ class Car extends Model
     protected $fillable = [
         'vehicle_model',
         'vehicle_number',
+        'description',
         'seating_capacity',
         'rent_per_day',
+        'is_booked'
     ];
 }
