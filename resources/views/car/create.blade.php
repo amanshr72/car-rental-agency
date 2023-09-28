@@ -12,7 +12,13 @@
     </x-slot>
 
     <div class="container-xxl bg-white p-6  rounded-t-lg">
-
+        <div>
+            <figure class="text-center">
+                <blockquote class="blockquote">
+                  <p>This form is designed to help you add essential details easily and efficiently. It simplifies the process of providing necessary information, ensuring a user-friendly experience.</p>
+                </blockquote>
+              </figure>
+        </div>
         <form action="{{ $cars ? route('car.update', $cars->id) : route('car.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             @if($cars) @method('PUT') @endif
@@ -42,6 +48,17 @@
             <div class="form-group py-2">
                 <div class="row justify-content-center">
                     <div class="col-2">
+                        <label for="description">Vehicle Description</label>
+                    </div>
+                    <div class="col-6">
+                        <x-input name="description" id="description" value="{{ old('description', $cars ? $cars->description : '') }}" placeholder="Enter Vehicle Description" />
+                        <input-box-error for="description" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group py-2">
+                <div class="row justify-content-center">
+                    <div class="col-2">
                         <label for="seating_capacity">Seating Capacity</label>
                     </div>
                     <div class="col-6">
@@ -64,14 +81,14 @@
             <div class="form-group py-2">
                 <div class="row justify-content-center">
                     <div class="col-2">
-                        <label for="image_path">Upload Image</label>
+                        <label for="vehicle_image">Upload Image</label>
                     </div>
                     <div class="col-6">
-                        <x-input type="file" name="image_path" id="image_path" />
-                        @if(isset($cars->image_path))
-                            <a href="{{asset('images/vehicle_images/'. $cars->image_path)}}" target="_blank">view file</a>
+                        <x-input type="file" name="vehicle_image" id="vehicle_image" />
+                        @if(isset($cars->vehicle_image))
+                            <a href="{{asset('images/vehicle_images/'. $cars->vehicle_image)}}" target="_blank">view file</a>
                         @endif
-                        <input-box-error for="image_path" />
+                        <input-box-error for="vehicle_image" />
                     </div>
                 </div>
             </div>

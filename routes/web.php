@@ -16,10 +16,6 @@ use App\Http\Controllers\CarController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -33,6 +29,6 @@ Route::middleware('auth')->group(function () {
     Route::resource('booking', BookingController::class);
 });
 
-Route::get('available-cars', [CarController::class, 'availableCars'])->name('available-cars');
+Route::get('/', [CarController::class, 'availableCars'])->name('available-cars');
 
 require __DIR__.'/auth.php';

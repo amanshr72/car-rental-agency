@@ -16,8 +16,10 @@ return new class extends Migration
             $table->string('vehicle_model')->nullable();
             $table->string('vehicle_number')->nullable();
             $table->string('vehicle_image')->nullable();
+            $table->string('description')->nullable();
             $table->integer('seating_capacity')->nullable();
             $table->decimal('rent_per_day', 10, 2)->nullable();
+            $table->boolean('is_booked')->nullable();
             $table->timestamps();
         });
     }

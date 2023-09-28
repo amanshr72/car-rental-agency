@@ -16,6 +16,7 @@
                         {{ __('Home') }}
                     </x-nav-link>
                 </div>
+                @auth
                 @if(auth()->user()->user_type === "agency")
                     <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                         <x-nav-link :href="route('car.index')" :active="request()->routeIs('car.index')">
@@ -35,6 +36,7 @@
                         </x-nav-link>
                     </div>
                 @endif
+                @endauth
             </div>
 
             <!-- Settings Dropdown -->
