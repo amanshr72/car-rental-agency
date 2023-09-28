@@ -19,7 +19,7 @@
             @foreach ($availableCars as $car)
                 <div class="col">
                     <div class="card">
-                        <img src="{{ asset('path/to/vehicle_images/' . $car->vehicle_image) }}" class="card-img-top" alt="{{ $car->vehicle_model }}">
+                        <img src="{{ asset('images/vehicle_images/' . $car->vehicle_image) }}" style="height: 300px;" class="card-img-top" alt="{{ $car->vehicle_model }}">
                         <div class="card-body">
                             <h5 class="card-title text-uppercase">#3b71ca</h5>
                             <p class="card-text">
